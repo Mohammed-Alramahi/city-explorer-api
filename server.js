@@ -9,6 +9,9 @@ server.use(cors());
 server.listen(port,()=>{
     console.log("listening to port: "+port,"http://localhost:"+port+"/weather");
 });
+server.get('/',(request,response)=>{
+ response.statusCode('404').send("not found!")
+});
 server.get('/weather',(request,response)=>{
  let city_name=request.query.searchQuery;
  let lon=request.query.lon;
