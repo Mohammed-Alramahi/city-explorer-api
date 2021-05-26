@@ -1,40 +1,35 @@
 const express = require('express');
 const cors= require('cors');
 require('dotenv').config();
-const port= process.env.PORT;
-const weatherData=require('./assets/data/weather.json');
+const Axios=require('axios');
+const envPort= process.env.PORT;
+const envWeatherUrl=process.env.WEATHER_API;
+const envWeatherApiKey=process.env.WEATHER_API_KEY;
 const server=express();
 
+
 server.use(cors());
-server.listen(port,()=>{
-    console.log("listening to port: "+port,"http://localhost:3300/weather?q=amman&lon=36&lat=32");
+server.listen(envPort,()=>{
+    console.log("listening to port: "+envPort,"http://localhost:3300/weather?q=amman&lon=36&lat=32");
 });
 server.get('/',(request,response)=>{
  response.send("not found!")
  });
-server.get('/weather',(request,response)=>{
- let city_name=request.query.q;
+server.get('/weather',handleWeatherApi);
+ function handleWeatherApi(request,response){ 
  let lon=request.query.lon;
  let lat=request.query.lat;
- let responseArr=weatherData.find(item=>{
- if(item.city_name.toLowerCase()==city_name.toLowerCase()&&Math.round(item.lon)==lon&&Math.round(item.lat)==lat){
+ let weatherUrl=`${envWeatherUrl}lat=${lat}&lon=${lon}&key=${envWeatherApiKey}`;
+  Axios.get(weatherUrl).then(result=>{
+    console.log('hello',result.data);
  
-    return item;
-     
- }
+ let forecastArr=result.data.data.map(item=>{
+  return new Forecast(item);
  });
- console.log(responseArr);
- if(responseArr){
- let cityData=responseArr.data.map(item=>{
-    return new Forecast(item); 
-    });
-    
-        response.send(cityData);
-    }
-    else{
-        response.send("not found!");
-    }
-});
+ response.send(forecastArr);
+
+ });
+}
 
 class Forecast{
     constructor(item){
@@ -45,6 +40,6 @@ class Forecast{
 }
 
 server.get('*',(request,response)=>{
-    response.send("not found!")
+    response.send("not found!ss")
     });
     
