@@ -8,7 +8,7 @@ const server = express();
 
 server.use(cors());
 server.listen(envPort, () => {
-    console.log("listening to port: " + envPort, "http://localhost:3300/weather?q=amman&lon=36&lat=32");
+    console.log("listening to port: " + envPort);
 });
 server.get('/', (request, response) => {
     response.send("not found!")
@@ -20,6 +20,9 @@ function handleWeatherApi(request, response) {
     let lon = request.query.lon;
     let lat = request.query.lat;
     let weatherUrl = `${envWeatherUrl}lat=${lat}&lon=${lon}&key=${envWeatherApiKey}`;
+    
+    
+    
     Axios
     .get(weatherUrl)
     .then(result => {
@@ -45,6 +48,7 @@ function handleMovieApi(request,response){
     let movieUrl;
     if(movieName){
        movieUrl=`${envMovieUrl}api_key=${envMovieApiKey}&query=${movieName}`
+       console.log(`http://localhost:3300/movies?api_key=${envMovieApiKey}&query=${movieName}`);
     }
     else{
         response.send('Something wrong!');
