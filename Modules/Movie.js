@@ -33,6 +33,7 @@ class Movie {
     constructor(item) {
         this.title = item.title;
         this.overview = item.overview;
+        this.image = `https://image.tmdb.org/t/p/w500${item.poster_path}`;// I got help from one of my collegues! on this one
         this.average_votes=item.vote_average;
         this.total_votes=item.vote_count;
         this.popularity=item.popularity;

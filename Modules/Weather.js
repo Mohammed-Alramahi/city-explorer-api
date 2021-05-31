@@ -8,8 +8,6 @@ function handleWeatherApi(request, response) {
     Axios
         .get(weatherUrl)
         .then(result => {
-            console.log('hello', result.data);
-
             let forecastArr = result.data.data.map(item => {
                 return new Forecast(item);
             });
